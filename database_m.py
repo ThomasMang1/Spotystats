@@ -102,17 +102,17 @@ def save_top_artists_to_file(conn, output_file):
 # Fonction principale
 def main():
     # Dossier contenant les fichiers JSON
-    folder_path = 'Spotify Extended Streaming History/'
+    folder_path = 'data/'
     output_file = 'ArtistsRanking.txt'  # Fichier de sortie pour les résultats
 
     # Connexion à la base de données
     conn = connect_to_db()
 
     # Créer la table
-    # create_table(conn)
+    ## create_table(conn)
 
     # Importer les données JSON de tous les fichiers du dossier
-    # import_data_from_json(conn, folder_path)
+    ## import_data_from_json(conn, folder_path)
 
     # Sauvegarder le classement des artistes dans un fichier texte
     save_top_artists_to_file(conn, output_file)
