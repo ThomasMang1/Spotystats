@@ -80,8 +80,8 @@ def import_data_from_json(conn, folder_path):
     conn.commit()
     cur.close()
 
-# Afficher le nombre d'écoutes par artiste classés par ordre décroissant
-def get_top_artists(conn):
+# Écrire le classement des artistes dans un fichier texte
+def save_top_artists_to_file(conn, output_file):
     cur = conn.cursor()
     cur.execute("""
         SELECT master_metadata_album_artist_name, COUNT(*) as play_count
@@ -91,27 +91,31 @@ def get_top_artists(conn):
         ORDER BY play_count DESC
     """)
     results = cur.fetchall()
-    for artist, count in results:
-        print(f"{artist}: {count} écoutes")
+    
+    with open(output_file, 'w', encoding='utf-8') as f:
+        for artist, count in results:
+            f.write(f"{artist}: {count} écoutes\n")
+    
+    print(f"Classement des artistes enregistré dans {output_file}")
     cur.close()
 
 # Fonction principale
 def main():
     # Dossier contenant les fichiers JSON
     folder_path = 'Spotify Extended Streaming History/'
+    output_file = 'ArtistsRanking.txt'  # Fichier de sortie pour les résultats
 
     # Connexion à la base de données
     conn = connect_to_db()
 
     # Créer la table
-    create_table(conn)
+    # create_table(conn)
 
     # Importer les données JSON de tous les fichiers du dossier
-    import_data_from_json(conn, folder_path)
+    # import_data_from_json(conn, folder_path)
 
-    # Afficher le nombre d'écoutes par artiste
-    print("Nombre d'écoutes par artiste (classement décroissant) :")
-    get_top_artists(conn)
+    # Sauvegarder le classement des artistes dans un fichier texte
+    save_top_artists_to_file(conn, output_file)
 
     # Fermer la connexion
     conn.close()
